@@ -1,0 +1,12 @@
+{
+  "name": "Encrypted Box",
+  "start_url": "https://www.encryptedbox.co/",
+  "description": "A decentralized password manager",
+  "icons": [
+    {
+      "src": "https://www.encryptedbox.co/assets/icono.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

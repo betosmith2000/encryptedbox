@@ -1,0 +1,161 @@
+<h1 class="display-4">My Notes</h1>
+<button type="button" (click)="navigateFolder(p)"  class="btn btn-link btn-sm bc"  *ngFor="let p of dataService?.accessedFolders">{{p.folderName}} /</button>
+
+<div class="row">
+    <div class="col">
+        <div class="btn-toolbar mb-3 float-right" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2 " role="group" aria-label="First group">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#divFile" (click)="newNote()">Add Note</button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#divFolder" (click)="newFolder()">Add Folder</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-4" *ngFor="let p of dataService?.currentFolder?.folders" >
+        <div class="card  shadow  m-2 manita block-container" (click)="folderEnter(p)">
+            <div class="text-center text-warning" style="margin-top: 50px;">
+                <fa-icon [icon]="folderIcon" size="10x" ></fa-icon>
+            </div>
+            <div class="card-img-overlay" >
+                <h5 class="card-title font-weight-lighter">{{p.folderName}}</h5>
+                <p class="card-text content small font-italic">{{p.folderNotes}}</p>
+                <div style="position: absolute; justify-content: flex-end; margin-bottom: 5px; " class="btn-toolbar small content  fixed-bottom" role="toolbar" aria-label="Toolbar">
+                    <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Toolbar">
+                        <button type="button" class="btn btn-info mx-1" (click)="showEditFolder($event, p)" title="Edit folder">
+                            <fa-icon [icon]="editIcon" ></fa-icon>
+                        </button>
+                        <button type="button" class="btn btn-danger" (click)="deleteFolder($event, p)" title="Delete folder">
+                            <fa-icon [icon]="deleteIcon" ></fa-icon>
+                        </button>
+                    </div>
+                </div>
+              </div>
+           
+        </div>
+    </div>
+</div>
+<div class="row"  >
+    <div class="col-sm-12 col-md-6 col-lg-6" *ngFor="let p of dataService?.currentFolder?.notes" >
+        <div class="card m-1  shadow   block-container">            
+            <div class="card-body small  border-light">
+                <div>
+                    <label class="text-info">{{p.fileName}}</label>
+                </div>
+                <div >
+                    <div class="input-group input-group-sm">
+                        <textarea rows="10" class="form-control form-control-sm font-weight-lighter input-password"  #notesInput [(ngModel)]="p.fileNotes" disabled></textarea>
+                        <div class="input-group-prepend">
+                            <button class="btn btn-link btn-sm input-group-text" (click)="viewPassword(notesInput)" title="View text">
+                                <fa-icon [icon]="viewPassIcon" ></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-2">
+                    <div class="btn-toolbar float-right content" role="toolbar" aria-label="Toolbar">
+                        <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Toolbar">
+                            <button type="button" class="btn btn-info" (click)="showEditNote(p)" title="Edit note">
+                                <fa-icon [icon]="editIcon" ></fa-icon>
+                            </button>
+                            <!-- <button type="button" class="btn btn-info mx-1" (click)="showShareNote($event, p)" title="Share note" *ngIf="false">
+                                <fa-icon [icon]="shareIcon" ></fa-icon>
+                            </button> -->
+                            <button type="button" class="btn btn-danger" (click)="delete(p)" title="Delete note">
+                                <fa-icon [icon]="deleteIcon" ></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="divFile">
+    <form novalidate (ngSubmit)="saveNote()" [formGroup]="fileForm" autocomplete="anyrandomstring">
+
+    <div class="modal-dialog modal-dialog-centered " role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Add Note</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+              
+                <div class="form-group">
+                    <label for="txtUsename_">Name*:</label>
+                    <input  autocomplete="false" type="text" class="form-control" id="txtUsename_" placeholder="Enter name"  formControlName="fileName"
+                        [ngClass]="{'is-invalid':(fileName.touched || fileName.dirty) && !fileName.valid}" />
+                    <span class="invalid-feedback" *ngIf="fileName.invalid && (fileName.touched || fileName.dirty) ">
+                        <span *ngIf="fileName.errors.required">Name is required</span>
+                        <span *ngIf="fileName.errors.maxlength">The maximum length is 128</span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="txtNotes">Notes:</label>
+                    <textarea autocomplete="false" rows="4" class="form-control" id="txtNotes" placeholder="Enter notes"  formControlName="fileNotes"
+                        [ngClass]="{'is-invalid':(fileNotes.touched || fileNotes.dirty) && !fileNotes.valid}">
+                    </textarea>
+                    <span class="invalid-feedback" *ngIf="fileNotes.invalid && (fileNotes.touched || fileNotes.dirty) ">
+                        <span *ngIf="fileNotes.errors.required">Notes are required</span>
+                        <span *ngIf="fileNotes.errors.maxlength">The maximum length is 128</span>
+                    </span>
+                </div>
+        </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!fileForm.valid" >Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+<div class="modal" tabindex="-1" role="dialog" id="divFolder">
+    <form novalidate (ngSubmit)="saveFolder()" [formGroup]="folderForm" autocomplete="anyrandomstring">
+
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Add Folder</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+                <div class="form-group">
+                    <label for="txtFolderName">Folder name*:</label>
+                    <input autocomplete="false" type="url" class="form-control" id="txtUrl" placeholder="Enter folder name"  formControlName="folderName"
+                        [ngClass]="{'is-invalid':(folderName.touched || folderName.dirty) && !folderName.valid}" />
+                    <span class="invalid-feedback" *ngIf="folderName.invalid && (folderName.touched || folderName.dirty) ">
+                        <span *ngIf="folderName.errors.required">Folder name is required</span>
+                        <span *ngIf="folderName.errors.maxlength">The maximum length is 128</span>
+                    </span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="txtNotes">Notes:</label>
+                    <textarea autocomplete="false" rows="4" class="form-control" id="txtNotes" placeholder="Enter notes"  formControlName="folderNotes"
+                        [ngClass]="{'is-invalid':(folderNotes.touched || folderNotes.dirty) && !folderNotes.valid}">
+                    </textarea>
+                    <span class="invalid-feedback" *ngIf="folderNotes.invalid && (folderNotes.touched || folderNotes.dirty) ">
+                        <span *ngIf="folderNotes.errors.required">Notes are required</span>
+                        <span *ngIf="folderNotes.errors.maxlength">The maximum length is 128</span>
+                    </span>
+                </div>
+        </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!folderForm.valid" >Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

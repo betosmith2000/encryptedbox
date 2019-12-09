@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+body, html {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  @font-face {
+    font-family: pass;
+    src: url(assets/password.ttf) format("truetype");
+  }

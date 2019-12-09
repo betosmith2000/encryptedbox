@@ -1,0 +1,197 @@
+<h1 class="display-4">Recent Passwords</h1>
+<div class="container">
+    <div class="border border-info  p-3 mb-2 bg-info text-white rounded shadow" *ngIf="dataService?.recentPasswords?.length == 0">
+        <span>You have not saved passwords yet! </span>       
+    </div>
+    <div class="row"  *ngIf="dataService?.recentPasswords?.length > 0" >
+        <div class="col-sm-12 col-md-6 col-lg-4" *ngFor="let p of dataService?.recentPasswords" >
+            <div class="card m-1  shadow   block-container">
+                <div class="card-body small  border-light">
+                    <div>
+                        <button type="button" class="btn btn-link btn-sm text-info " (click)="launchApp(p)" >{{p.fileUrl}}</button> 
+                    </div>
+                    <hr>
+                    <div >
+                        <label for="validationTooltipUsername" class="font-weight-lighter">Username</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-sm input-password"  #userNameInput [(ngModel)]="p.fileUserName" disabled>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-link btn-sm input-group-text" (click)="viewPassword(userNameInput)" title="View text">
+                                    <fa-icon [icon]="viewPassIcon" ></fa-icon>
+                                </button>
+                                <button class="btn btn-link btn-sm input-group-text" (click)="copy(userNameInput)" itle="Copy">
+                                    <fa-icon [icon]="copyIcon" ></fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div >
+                        <label for="validationTooltipUsername" class="font-weight-lighter">Password</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-sm input-password"  #passwordInput [(ngModel)]="p.filePassword" disabled>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-link btn-sm input-group-text" (click)="viewPassword(passwordInput)" title="View text">
+                                    <fa-icon [icon]="viewPassIcon" ></fa-icon>
+                                </button>
+                                <button class="btn btn-link btn-sm input-group-text" (click)="copy(passwordInput)" title="Copy">
+                                    <fa-icon [icon]="copyIcon" ></fa-icon>
+                                </button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div >
+                        <label for="validationTooltipUsername" class="font-weight-lighter">Notes</label>
+                        <div class="input-group input-group-sm">
+                            <textarea rows="1" class="form-control form-control-sm font-weight-lighter"  #notesInput [(ngModel)]="p.fileNotes" disabled></textarea>
+                            <!-- <div class="input-group-prepend">
+                                <button class="btn btn-link input-group-text" (click)="copy(notesInput)">
+                                    <fa-icon [icon]="copyIcon" ></fa-icon>
+                                </button>
+                            </div> -->
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<h1 class="display-4 mt-5">Password bookmarks</h1>
+<div class="container">
+    <div class="border border-info  p-3 mb-2 bg-info text-white rounded shadow"  *ngIf="dataService?.bookmarkPasswords?.length == 0">
+        <span >You don't have bookmarks yet!</span>
+    </div>
+    <div class="row"  *ngIf="dataService?.bookmarkPasswords?.length > 0" >
+            <div class="col-sm-12 col-md-6 col-lg-4" *ngFor="let p of dataService?.bookmarkPasswords" >
+                <div class="card m-1  shadow   block-container">
+                    <div class="card-body small  border-light">
+                        <div>
+                            <button type="button" class="btn btn-link btn-sm text-info" (click)="launchApp(p)" >{{p.fileUrl}}</button> 
+                            <button type="button" class="btn btn-link btn-sm float-right content text-danger " (click)="removeBookmark(p)" title="Remove bookmark" >
+                                <fa-icon [icon]="removeFavIcon" ></fa-icon>
+                            </button> 
+                        </div>
+                        <hr>
+                        <div >
+                            <label for="validationTooltipUsername" class="font-weight-lighter">Username</label>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm input-password"  #userNameInput [(ngModel)]="p.fileUserName" disabled>
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-link btn-sm input-group-text" (click)="viewPassword(userNameInput)" title="View text">
+                                        <fa-icon [icon]="viewPassIcon" ></fa-icon>
+                                    </button>
+                                    <button class="btn btn-link btn-sm input-group-text" (click)="copy(userNameInput)" itle="Copy">
+                                        <fa-icon [icon]="copyIcon" ></fa-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div >
+                            <label for="validationTooltipUsername" class="font-weight-lighter">Password</label>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm input-password"  #passwordInput [(ngModel)]="p.filePassword" disabled>
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-link btn-sm input-group-text" (click)="viewPassword(passwordInput)" title="View text">
+                                        <fa-icon [icon]="viewPassIcon" ></fa-icon>
+                                    </button>
+                                    <button class="btn btn-link btn-sm input-group-text" (click)="copy(passwordInput)" title="Copy">
+                                        <fa-icon [icon]="copyIcon" ></fa-icon>
+                                    </button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div >
+                            <label for="validationTooltipUsername" class="font-weight-lighter">Notes</label>
+                            <div class="input-group input-group-sm">
+                                <textarea rows="1" class="form-control form-control-sm font-weight-lighter"  #notesInput [(ngModel)]="p.fileNotes" disabled></textarea>
+                                <!-- <div class="input-group-prepend">
+                                    <button class="btn btn-link input-group-text" (click)="copy(notesInput)">
+                                        <fa-icon [icon]="copyIcon" ></fa-icon>
+                                    </button>
+                                </div> -->
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+
+<h1 class="display-4 mt-5">Shared with me</h1>
+<div class="container">
+    <div class="border border-info  p-3 mb-2 bg-info text-white rounded shadow"  *ngIf="sharedService?.sharedContents?.length == 0">
+        <span >There is no content shared with you yet!</span>
+    </div>
+
+    <div class="row"  *ngIf="sharedService?.sharedContents?.length > 0" >
+        <div class="col-sm-12 col-md-6 col-lg-4" *ngFor="let p of sharedService?.sharedContents" >
+            <div class="card m-1  shadow   block-container">
+                <div class="card-body small  border-light">
+                    <div>
+                        <button type="button" class="btn btn-link btn-sm text-info" (click)="launchApp(p)" >{{p.name}}</button> 
+                        <button type="button" class="btn btn-link btn-sm float-right content text-danger " (click)="removeBookmark(p)" title="Remove bookmark" >
+                            <fa-icon [icon]="removeFavIcon" ></fa-icon>
+                        </button> 
+                    </div>
+                    <hr>
+
+                    <div class="font-weight-lighter text-success">From: {{p.source}}</div>
+                    <div *ngIf="p.content" >
+                        <label for="validationTooltipUsername" class="font-weight-lighter">Username</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-sm input-password"  #userNameInput [(ngModel)]="p.content.fileUserName" disabled>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-link btn-sm input-group-text" (click)="viewPassword(userNameInput)" title="View text">
+                                    <fa-icon [icon]="viewPassIcon" ></fa-icon>
+                                </button>
+                                <button class="btn btn-link btn-sm input-group-text" (click)="copy(userNameInput)" itle="Copy">
+                                    <fa-icon [icon]="copyIcon" ></fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="p.content"  >
+                        <label for="validationTooltipUsername" class="font-weight-lighter">Password</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-sm input-password"  #passwordInput [(ngModel)]="p.content.filePassword" disabled>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-link btn-sm input-group-text" (click)="viewPassword(passwordInput)" title="View text">
+                                    <fa-icon [icon]="viewPassIcon" ></fa-icon>
+                                </button>
+                                <button class="btn btn-link btn-sm input-group-text" (click)="copy(passwordInput)" title="Copy">
+                                    <fa-icon [icon]="copyIcon" ></fa-icon>
+                                </button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div  *ngIf="p.content" >
+                        <label for="validationTooltipUsername" class="font-weight-lighter">Notes</label>
+                        <div class="input-group input-group-sm">
+                            <textarea rows="1" class="form-control form-control-sm font-weight-lighter"  #notesInput [(ngModel)]="p.content.fileNotes" disabled></textarea>
+                            <!-- <div class="input-group-prepend">
+                                <button class="btn btn-link input-group-text" (click)="copy(notesInput)">
+                                    <fa-icon [icon]="copyIcon" ></fa-icon>
+                                </button>
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- <div class="text-center">
+                        <button class="btn btn-link text-info" (click)="loadSharedContent(p)">Load Content</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>

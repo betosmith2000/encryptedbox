@@ -1,0 +1,29 @@
+
+.input-password{
+    font-family: 'pass' ;
+}
+
+.folder-name{
+    text-transform: uppercase;
+    font-weight: 400;
+}
+.manita{
+    cursor: pointer;
+}
+
+.bc{
+   padding: 2px!important;
+}
+
+.block-container{
+
+}
+
+.content{
+    visibility: hidden;;
+}
+
+.block-container:hover .content{
+    visibility: visible;
+}
+

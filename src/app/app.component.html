@@ -1,0 +1,68 @@
+<!-- <app-header></app-header> -->
+
+<!-- <ngx-ui-loader></ngx-ui-loader> -->
+<!-- <div class="row h-100" id="wrapper"> -->
+    
+            <!-- 
+         -->
+    <!-- <div class="col-9 bg-light">
+        <div class="ml-2 mt-2">
+        </div>
+    </div> -->
+<!-- </div> -->
+
+<!-- <app-footer></app-footer> -->
+<ngx-ui-loader ></ngx-ui-loader>
+<div id="wrapper" class="active" [ngClass]="{'no-user-padding': !isSignIn}">  
+    <div id="sidebar-wrapper"  [ngClass]="{ 'no-user-sidebar': !isSignIn }">
+        <ul id="sidebar_menu" class="sidebar-nav">
+            <li class="sidebar-brand">
+                <span class="text-light font-weight-light text-truncat">{{userName}}</span>
+                <button class="btn btn-link float-right text-info pt-3" id="menu-toggle" (click)="toggleMenu()">
+                    <fa-icon [icon]="faBars" size="2x"></fa-icon>
+                </button>
+            </li>
+        </ul>
+        <ul class="sidebar-nav font-weight-light" id="sidebar" >
+            <li>
+                <a [routerLinkActive]="['active']" [routerLink]="['/all']">
+                    <fa-icon [icon]="allIcon" ></fa-icon>&nbsp;&nbsp;&nbsp;All  <fa-icon [icon]="allIcon" class="float-right mr-3"  *ngIf="!isOpenSideBar" [border]="true" ></fa-icon>
+                </a>
+                
+            </li>
+            <li>
+                <a [routerLinkActive]="['active']" [routerLink]="['/passwords']">
+                    <fa-icon [icon]="passIcon"></fa-icon>&nbsp;&nbsp;&nbsp;My Passwords <fa-icon [icon]="passIcon" class="float-right mr-3"  *ngIf="!isOpenSideBar"  ></fa-icon>
+                </a>
+            </li>
+            <li>
+                <a [routerLinkActive]="['active']" [routerLink]="['/notes']">
+                    <fa-icon [icon]="notesIcon"></fa-icon>&nbsp;&nbsp;&nbsp;My Notes  <fa-icon [icon]="notesIcon"  class="float-right mr-3"  *ngIf="!isOpenSideBar" ></fa-icon>
+                </a>
+            </li>
+            <li>
+                <a (click)="signOut()" class="manita" >
+                    <fa-icon [icon]="signOutIcon"></fa-icon>&nbsp;&nbsp;&nbsp;Sign Out <fa-icon [icon]="signOutIcon"  class="float-right mr-3"  *ngIf="!isOpenSideBar" ></fa-icon>
+                </a>
+            </li>
+        </ul>
+    </div>
+              
+          <!-- Page content -->
+          <div id="page-content-wrapper" style="overflow: auto;max-height: 100vh;"  >
+            <!-- Keep all page content within the page-content inset div! -->
+            <router-outlet ></router-outlet>
+            
+        <br>
+            </div>
+          
+    </div>
+    <footer>
+            <nav class="navbar navbar navbar-light fixed-bottom noPadding shadow">
+                <div class="container text-center">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                       <label class="small font-weight-bold text-light">&#9400;2019 Encrypted Box 
+                         <span class="small"> v.{{version}}</span></label></div>
+                </div>
+            </nav>
+          </footer>
