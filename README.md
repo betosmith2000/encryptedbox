@@ -1,27 +1,27 @@
-# EncryptedBox
+## Inspiration
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.19.
+Nowadays there are hacks everywhere, big companies lose our data and we can't do anything. Encrypted Box saves all data with encryption and in a decentralized manner which protects us against these damages that increasingly affect us.
 
-## Development server
+## What it does
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+It allows you to save passwords and notes by organizing them in folders, all in an encrypted way.
 
-## Code scaffolding
+## How I built it
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+It is developed on Blockstack ID and GAIA Storage, which allows us to have decentralized blockchain identity and decentralized storage.
 
-## Build
+## Challenges I ran into
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Develop a product with a good quality and especially functional. When thinking about decentralized applications, numerous servers come to mind, although Blockstack manages this part very well.
 
-## Running unit tests
+## Accomplishments that I'm proud of
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Develop the application 100% in the time I set, and I liked the result quite a bit, I hope users like it too.
 
-## Running end-to-end tests
+## What I learned
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Many things I have learned in this way, from best practices when coding to creating the site together with the domain and the certificate.
 
-## Further help
+## What's next for Encrypted Box
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+I am thinking of adding one more section, such as file storage, I already have the feature of sharing so I think it will be welcome.
