@@ -1,0 +1,39 @@
+
+<div class="card p-1 shadow" >
+  <div class="card-body">
+    <form novalidate (ngSubmit)="sendMessage()" [formGroup]="form" autocomplete="off">
+      <div class="form-group">
+        <label for="txtName">Name</label>
+        <input type="text" class="form-control" id="txtName" aria-describedby="nameHelp" placeholder="Enter youy name" formControlName="name"
+        [ngClass]="{'is-invalid':(name.touched || name.dirty) && !name.valid}" >
+        <span class="invalid-feedback" *ngIf="(name?.touched || name?.dirty) && name?.errors">
+            <span *ngIf="name?.errors.required">Name is required</span>
+
+        </span>
+        <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your email address" formControlName="email"
+        [ngClass]="{'is-invalid':(email.touched || email.dirty) && !email.valid}" >
+        <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+        <span class="invalid-feedback" *ngIf="(email?.touched || email?.dirty) && email?.errors">
+            <span *ngIf="email?.errors.required">Email is required</span>
+            <span *ngIf="email?.errors.email">The email format is incorrect</span>
+            <!-- <span *ngIf="name?.errors.maxlength">La longitud máxima es de 128 caracteres.</span> -->
+
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="txtMessage">Message</label>
+        <textarea rows="5" class="form-control" id="txtMessage" aria-describedby="messageHelp" placeholder="Enter message" formControlName="message"
+        [ngClass]="{'is-invalid':(message.touched || message.dirty) && !message.valid}" ></textarea>
+           <span class="invalid-feedback" *ngIf="(message?.touched || message?.dirty) && message?.errors">
+           <span *ngIf="message?.errors.required">Message is required</span>
+           </span>
+      </div>
+      <button type="submit" class="btn btn-primary float-right" [disabled]="!form.valid">Send</button>
+    </form>
+        
+  </div>
+</div>

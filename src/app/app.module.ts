@@ -13,6 +13,7 @@ import { ToastrModule} from 'ngx-toastr';
 import { NgxUiLoaderModule,  NgxUiLoaderConfig, SPINNER, POSITION, PB_DIRECTION, NgxUiLoaderHttpModule  } from 'ngx-ui-loader';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
@@ -33,7 +34,8 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     PasswordsComponent,
     HomeComponent,
     DashboardComponent,
-    NotesComponent
+    NotesComponent,
+    ContactUsComponent
   ],
   imports: [
     BrowserModule,
