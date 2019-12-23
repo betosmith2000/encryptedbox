@@ -14,6 +14,7 @@ import { NgxUiLoaderModule,  NgxUiLoaderConfig, SPINNER, POSITION, PB_DIRECTION,
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { ContactUsPageComponent } from './contact-us-page/contact-us-page.component';
 
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
@@ -35,7 +36,8 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     HomeComponent,
     DashboardComponent,
     NotesComponent,
-    ContactUsComponent
+    ContactUsComponent,
+    ContactUsPageComponent
   ],
   imports: [
     BrowserModule,

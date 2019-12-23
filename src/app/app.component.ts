@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
 import * as blockstack from 'node_modules/blockstack/dist/blockstack.js';
-import { faBars, faSignOutAlt, faPassport, faStickyNote, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSignOutAlt, faPassport, faStickyNote, faLayerGroup, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { environment } from 'src/environments/environment';
 
 
@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   passIcon = faPassport;
   notesIcon=faStickyNote ;
   signOutIcon=faSignOutAlt;
+  contactUsIcon =faEnvelope;
   isOpenSideBar = true;
 
   writeOptions : any = {encrypt: false};

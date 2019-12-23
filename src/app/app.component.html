@@ -41,6 +41,11 @@
                 </a>
             </li>
             <li>
+                <a [routerLinkActive]="['active']" [routerLink]="['/contactus']">
+                    <fa-icon [icon]="contactUsIcon"></fa-icon>&nbsp;&nbsp;&nbsp;Contact Us!  <fa-icon [icon]="contactUsIcon"  class="float-right mr-3"  *ngIf="!isOpenSideBar" ></fa-icon>
+                </a>
+            </li>
+            <li>
                 <a (click)="signOut()" class="manita" >
                     <fa-icon [icon]="signOutIcon"></fa-icon>&nbsp;&nbsp;&nbsp;Sign Out <fa-icon [icon]="signOutIcon"  class="float-right mr-3"  *ngIf="!isOpenSideBar" ></fa-icon>
                 </a>

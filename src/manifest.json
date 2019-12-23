@@ -8,5 +8,7 @@
       "sizes": "192x192",
       "type": "image/png"
     }
-  ]
+  ],
+  "did_authors": ["did:stack:v0:1NSHrXkQnTLCdzsQVobBGtHcMfJKFGWTYb"],
+  "did": ["did:stack:v0:1NSHrXkQnTLCdzsQVobBGtHcMfJKFGWTYb"]
 }
