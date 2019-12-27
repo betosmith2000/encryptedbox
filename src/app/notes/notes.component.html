@@ -96,8 +96,8 @@
                     </span>
                 </div>
                 <div class="form-group">
-                    <label for="txtNotes">Notes:</label>
-                    <textarea autocomplete="false" rows="4" class="form-control" id="txtNotes" placeholder="Enter notes"  formControlName="fileNotes"
+                    <label for="txtFileNotes">Notes:</label>
+                    <textarea autocomplete="false" rows="4" class="form-control" id="txtFileNotes" placeholder="Enter notes"  formControlName="fileNotes"
                         [ngClass]="{'is-invalid':(fileNotes.touched || fileNotes.dirty) && !fileNotes.valid}">
                     </textarea>
                     <span class="invalid-feedback" *ngIf="fileNotes.invalid && (fileNotes.touched || fileNotes.dirty) ">
@@ -131,7 +131,7 @@
         <div class="modal-body">
                 <div class="form-group">
                     <label for="txtFolderName">Folder name*:</label>
-                    <input autocomplete="false" type="url" class="form-control" id="txtUrl" placeholder="Enter folder name"  formControlName="folderName"
+                    <input autocomplete="false" type="url" class="form-control" id="txtFolderName" placeholder="Enter folder name"  formControlName="folderName"
                         [ngClass]="{'is-invalid':(folderName.touched || folderName.dirty) && !folderName.valid}" />
                     <span class="invalid-feedback" *ngIf="folderName.invalid && (folderName.touched || folderName.dirty) ">
                         <span *ngIf="folderName.errors.required">Folder name is required</span>

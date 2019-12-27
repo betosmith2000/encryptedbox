@@ -1,6 +1,6 @@
 {
   "name": "encrypted-box",
-  "version": "1.0.3",
+  "version": "1.0.32",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -30,7 +30,7 @@
     "ngx-ui-loader": "^7.2.2",
     "popper.js": "^1.15.0",
     "rxjs": "~6.4.0",
-    "serialize-javascript": "^2.1.2",
+   
     "ts-md5": "^1.2.4",
     "tslib": "^1.10.0",
     "web-animations-js": "^2.3.2",
