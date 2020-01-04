@@ -6,8 +6,10 @@ import { ToastrService } from 'ngx-toastr';
 import { PasswordModel } from './Models/password.model';
 import { Md5 } from 'ts-md5/dist/md5';
 import { ReplaySubject } from 'rxjs';
+import { ConfirmationService, ResolveEmit } from "@jaspero/ng-confirmations";
 
 
+declare var $: any;
 
 @Injectable({
   providedIn: 'root',
@@ -33,10 +35,11 @@ export class DataService {
     recentPasswords= new Array<PasswordModel>();
     bookmarkPasswords= new Array<PasswordModel>();
 
-    constructor(private ngxService: NgxUiLoaderService,private toastr: ToastrService){
+    constructor(private ngxService: NgxUiLoaderService,private toastr: ToastrService,
+        private _confirmation: ConfirmationService){
         const appConfig = new blockstack.AppConfig(['store_write', 'publish_data'])
         this.userSession = new blockstack.UserSession({appConfig:appConfig});
-        this.InitialiceRoot();      
+        this.InitialiceRoot();     
     }
 
     private InitialiceRoot(){
@@ -215,41 +218,61 @@ export class DataService {
     }
 
     deletePassword(p:PasswordModel){
-        if(confirm('Are you sure to delete ' + p.fileUrl +' Password?')){
-            let idx = this.currentFolder.passwords.findIndex(e=> e.id == p.id);
-            this.currentFolder.passwords.splice(idx,1);
-            this.ngxService.start(); 
-            this.userSession.putFile(this.currentFolder.filename,JSON.stringify(this.currentFolder) , this.writeOptions)
-                .then(() =>{
-                
-                this.toastr.success("The password was deleted correctly","Success")
-                this.ngxService.stop(); 
-                this.onDeletePassword.next(true);
-            }).catch((error) => {
-                console.log('Error deleting password!')
-                this.ngxService.stop();
-                this.onDeletePassword.next(false);
-            });
-        }
+
+
+        this._confirmation.create('Are you sure to delete ' + p.fileUrl +' Password?')
+        .subscribe((ans: ResolveEmit) => {
+            if (ans.resolved) {
+                let idx = this.currentFolder.passwords.findIndex(e=> e.id == p.id);
+                this.currentFolder.passwords.splice(idx,1);
+                this.ngxService.start(); 
+                this.userSession.putFile(this.currentFolder.filename,JSON.stringify(this.currentFolder) , this.writeOptions)
+                    .then(() =>{
+                    
+                    this.toastr.success("The password was deleted correctly","Success")
+                    this.ngxService.stop(); 
+                    this.removeBookmark(p);
+                    this.removeRecentPassword(p);
+                    this.onDeletePassword.next(true);
+                }).catch((error) => {
+                    console.log('Error deleting password!')
+                    this.ngxService.stop();
+                    this.onDeletePassword.next(false);
+                });
+            }
+        });
+        setTimeout(() => {
+            $(".jaspero__confirmation").css("position","static")    
+        }, 10);
+        
+
+    
     }
 
     deleteFolder(p:FolderPasswordModel){
-        if(confirm('Are you sure to delete \'' + p.folderName +'\' Folder?')){
-            let idx = this.currentFolder.folders.findIndex(e=> e.id == p.id);
-            this.currentFolder.folders.splice(idx,1);
-            this.ngxService.start(); 
-            this.userSession.putFile(this.currentFolder.filename,JSON.stringify(this.currentFolder) , this.writeOptions)
-                .then(() =>{
-                
-                this.toastr.success("Folder was deleted correctly","Success")
-                this.ngxService.stop(); 
-                this.onDeleteFolder.next(true);
-            }).catch((error) => {
-                console.log('Error deleting folder!')
-                this.ngxService.stop();
-                this.onDeleteFolder.next(false);
-            });
-        }
+        this._confirmation.create('Are you sure to delete \'' + p.folderName +'\' Folder?')
+        .subscribe((ans: ResolveEmit) => {
+            if (ans.resolved) {
+
+                let idx = this.currentFolder.folders.findIndex(e=> e.id == p.id);
+                this.currentFolder.folders.splice(idx,1);
+                this.ngxService.start(); 
+                this.userSession.putFile(this.currentFolder.filename,JSON.stringify(this.currentFolder) , this.writeOptions)
+                    .then(() =>{
+                    
+                    this.toastr.success("Folder was deleted correctly","Success")
+                    this.ngxService.stop(); 
+                    this.onDeleteFolder.next(true);
+                }).catch((error) => {
+                    console.log('Error deleting folder!')
+                    this.ngxService.stop();
+                    this.onDeleteFolder.next(false);
+                });
+            }
+        });
+        setTimeout(() => {
+            $(".jaspero__confirmation").css("position","static")    
+        }, 10);
     }
 
     addBookmark(p:PasswordModel){
@@ -264,6 +287,12 @@ export class DataService {
         let idx = this.bookmarkPasswords.findIndex(e=> e.id == p.id);
         this.bookmarkPasswords.splice(idx,1);
         this.saveBookmarksFile("Bookmark removed!");
+    }
+
+    removeRecentPassword(p:PasswordModel){
+        let idx = this.recentPasswords.findIndex(e=> e.id == p.id);
+        if(idx>=0)
+            this.recentPasswords.splice(idx,1);
     }
 
 

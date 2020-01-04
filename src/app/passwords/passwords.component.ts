@@ -7,7 +7,6 @@ import { PasswordModel } from '../share/Models/password.model';
 import { DataService } from '../share/data.service';
 import { FolderPasswordModel } from '../share/Models/folder-password.model';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { Md5 } from 'ts-md5/dist/md5';
 import * as blockstack from 'node_modules/blockstack/dist/blockstack.js';
 import { ApiService } from '../share/api.service';
 import { ShareModel } from '../share/Models/share.model';
@@ -60,6 +59,7 @@ export class PasswordsComponent implements OnInit {
     private ngxService: NgxUiLoaderService, private api: ApiService) {    
     const appConfig = new blockstack.AppConfig(['store_write', 'publish_data'])
     this.userSession = new blockstack.UserSession({appConfig:appConfig});
+    
 
    }
 

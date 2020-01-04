@@ -6,7 +6,9 @@ import { Md5 } from 'ts-md5/dist/md5';
 import { ReplaySubject } from 'rxjs';
 import { FolderNoteModel } from './Models/folder-note.model';
 import { NoteModel } from './Models/note.model';
+import { ConfirmationService, ResolveEmit } from "@jaspero/ng-confirmations";
 
+declare var $: any;
 
 
 @Injectable({
@@ -30,7 +32,8 @@ export class DataNoteService {
     accessedFolders= new Array<FolderNoteModel>();
     recentNotes= new Array<NoteModel>();
 
-    constructor(private ngxService: NgxUiLoaderService,private toastr: ToastrService){
+    constructor(private ngxService: NgxUiLoaderService,private toastr: ToastrService,
+        private _confirmation: ConfirmationService){
         const appConfig = new blockstack.AppConfig(['store_write', 'publish_data'])
         this.userSession = new blockstack.UserSession({appConfig:appConfig});
         this.InitialiceRoot();      
@@ -196,41 +199,56 @@ export class DataNoteService {
     }
 
     deleteNote(p:NoteModel){
-        if(confirm('Are you sure to delete ' + p.fileName +' Note?')){
-            let idx = this.currentFolder.notes.findIndex(e=> e.id == p.id);
-            this.currentFolder.notes.splice(idx,1);
-            this.ngxService.start(); 
-            this.userSession.putFile(this.currentFolder.filename,JSON.stringify(this.currentFolder) , this.writeOptions)
-                .then(() =>{
-                
-                this.toastr.success("The note was deleted correctly","Success")
-                this.ngxService.stop(); 
-                this.onDeleteNote.next(true);
-            }).catch((error) => {
-                console.log('Error deleting note!')
-                this.ngxService.stop();
-                this.onDeleteNote.next(false);
-            });
-        }
+        this._confirmation.create('Are you sure to delete ' + p.fileName +' Note?')
+        .subscribe((ans: ResolveEmit) => {
+            if (ans.resolved) {
+        
+                let idx = this.currentFolder.notes.findIndex(e=> e.id == p.id);
+                this.currentFolder.notes.splice(idx,1);
+                this.ngxService.start(); 
+                this.userSession.putFile(this.currentFolder.filename,JSON.stringify(this.currentFolder) , this.writeOptions)
+                    .then(() =>{
+                    
+                    this.toastr.success("The note was deleted correctly","Success")
+                    this.ngxService.stop(); 
+                    this.onDeleteNote.next(true);
+                }).catch((error) => {
+                    console.log('Error deleting note!')
+                    this.ngxService.stop();
+                    this.onDeleteNote.next(false);
+                });
+            }
+        });
+        setTimeout(() => {
+            $(".jaspero__confirmation").css("position","static")    
+        }, 10);
     }
 
     deleteFolder(p:FolderNoteModel){
-        if(confirm('Are you sure to delete \'' + p.folderName +'\' Folder?')){
-            let idx = this.currentFolder.folders.findIndex(e=> e.id == p.id);
-            this.currentFolder.folders.splice(idx,1);
-            this.ngxService.start(); 
-            this.userSession.putFile(this.currentFolder.filename,JSON.stringify(this.currentFolder) , this.writeOptions)
-                .then(() =>{
-                
-                this.toastr.success("Folder was deleted correctly","Success")
-                this.ngxService.stop(); 
-                this.onDeleteFolder.next(true);
-            }).catch((error) => {
-                console.log('Error deleting folder!')
-                this.ngxService.stop();
-                this.onDeleteFolder.next(false);
-            });
-        }
+        this._confirmation.create('Are you sure to delete \'' + p.folderName +'\' Folder?')
+        .subscribe((ans: ResolveEmit) => {
+            if (ans.resolved) {
+
+        
+                let idx = this.currentFolder.folders.findIndex(e=> e.id == p.id);
+                this.currentFolder.folders.splice(idx,1);
+                this.ngxService.start(); 
+                this.userSession.putFile(this.currentFolder.filename,JSON.stringify(this.currentFolder) , this.writeOptions)
+                    .then(() =>{
+                    
+                    this.toastr.success("Folder was deleted correctly","Success")
+                    this.ngxService.stop(); 
+                    this.onDeleteFolder.next(true);
+                }).catch((error) => {
+                    console.log('Error deleting folder!')
+                    this.ngxService.stop();
+                    this.onDeleteFolder.next(false);
+                });
+            }
+        });
+        setTimeout(() => {
+            $(".jaspero__confirmation").css("position","static")    
+        }, 10);
     }
 
 }

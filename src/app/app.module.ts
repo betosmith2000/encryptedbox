@@ -15,7 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { ContactUsPageComponent } from './contact-us-page/contact-us-page.component';
-
+import { JasperoConfirmationsModule } from '@jaspero/ng-confirmations';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   // bgsColor: 'red',
@@ -49,7 +49,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     HttpClientModule,
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     NgxUiLoaderHttpModule.forRoot({showForeground:true}),
-
+    JasperoConfirmationsModule.forRoot(),
 
   ],
   providers: [],

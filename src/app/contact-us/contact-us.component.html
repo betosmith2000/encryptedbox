@@ -32,7 +32,7 @@
            <span *ngIf="message?.errors.required">Message is required</span>
            </span>
       </div>
-      <button type="submit" class="btn btn-primary float-right" [disabled]="!form.valid">Send</button>
+      <button type="button" class="btn btn-primary float-right" [disabled]="!form.valid" (click)="sendMessage()">Send</button>
     </form>
         
   </div>
