@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
-import { faCopy, faEyeSlash, faEye, faTrash, faExternalLinkAlt, faFolderOpen, faStar, faMinusCircle, faShareAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faEyeSlash, faEye, faTrash, faExternalLinkAlt, faKey, faCog, faFolderOpen, faStar, faMinusCircle, faShareAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { PasswordModel } from '../share/Models/password.model';
 import { DataService } from '../share/data.service';
 import { FolderPasswordModel } from '../share/Models/folder-password.model';
@@ -10,7 +10,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import * as blockstack from 'node_modules/blockstack/dist/blockstack.js';
 import { ApiService } from '../share/api.service';
 import { ShareModel } from '../share/Models/share.model';
-
+import * as passgenerator from 'generate-password-browser';
 declare var $: any;
 
 @Component({
@@ -30,6 +30,8 @@ export class PasswordsComponent implements OnInit {
   removeFavIcon= faMinusCircle;
   shareIcon = faShareAlt;
   editIcon = faEdit;
+  generateIcon = faKey;
+  settingsIcon = faCog;
   userName :string  = 'User name';
 
   readOptions : any = {decrypt: false, username: null};
@@ -51,6 +53,10 @@ export class PasswordsComponent implements OnInit {
 
 
   
+  allowNumbers:boolean= true ;
+  allowSymbols:boolean= true ;
+  allowUpercase:boolean= true ;
+  passwordLength:number= 10;
 
   blockstackIdToShare : string;
   pkToShare:string ='';
@@ -115,8 +121,12 @@ export class PasswordsComponent implements OnInit {
     });
 
 
+  
+
     this.folderName = new FormControl('', [Validators.required]);
     this.folderNotes = new FormControl('');
+
+    
 
     this.folderForm = new FormGroup({
       folderName: this.folderName,
@@ -127,6 +137,8 @@ export class PasswordsComponent implements OnInit {
   }
   
   newPassword(){
+    $("#divGenerateSettings").hide();      
+
     this.editingPassword = new PasswordModel();
   }
   savePassword(){
@@ -231,6 +243,8 @@ export class PasswordsComponent implements OnInit {
     this.fileUserName.setValue(p.fileUserName);
     this.filePassword.setValue(p.filePassword);
     this.fileNotes.setValue(p.fileNotes);
+    $("#divGenerateSettings").hide();      
+
     $("#divFile").modal('show');       
 
   }
@@ -324,5 +338,26 @@ export class PasswordsComponent implements OnInit {
    
   }
 
+  getNewPassword(){
+   if(!(this.passwordLength>0))
+    this.passwordLength = 10;
+    
+    var password = passgenerator.generate({
+      numbers:this.allowNumbers,
+      length:this.passwordLength,
+      symbols:this.allowSymbols,
+      uppercase:this.allowUpercase,
+      strict:true
+    });
+    this.filePassword.setValue(password);
+    
+  }
 
+  showGenerateSettings(){
+    $("#divGenerateSettings").toggle( "slow");      
+  }
+
+  resetPasswordGenerationSettings(){
+    $("#divGenerateSettings").toggle( "slow");      
+  }
 }

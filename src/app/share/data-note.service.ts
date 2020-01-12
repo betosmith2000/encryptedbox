@@ -220,7 +220,7 @@ export class DataNoteService {
             }
         });
         setTimeout(() => {
-            $(".jaspero__confirmation").css("position","static")    
+            $(".jaspero__confirmation_dialog").css("position","fixed")    
         }, 10);
     }
 
@@ -247,7 +247,7 @@ export class DataNoteService {
             }
         });
         setTimeout(() => {
-            $(".jaspero__confirmation").css("position","static")    
+            $(".jaspero__confirmation_dialog").css("position","fixed")    
         }, 10);
     }
 
