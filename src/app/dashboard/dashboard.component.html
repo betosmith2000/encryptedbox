@@ -1,4 +1,4 @@
-<h1 class="display-4">Recent Passwords</h1>
+<!-- <h1 class="display-4">Recent Passwords</h1>
 <div class="container">
     <div class="border border-info  p-3 mb-2 bg-info text-white rounded shadow" *ngIf="dataService?.recentPasswords?.length == 0">
         <span>You have not saved passwords yet! </span>       
@@ -44,11 +44,7 @@
                         <label for="validationTooltipUsername" class="font-weight-lighter">Notes</label>
                         <div class="input-group input-group-sm">
                             <textarea rows="1" class="form-control form-control-sm font-weight-lighter"  #notesInput [(ngModel)]="p.fileNotes" disabled></textarea>
-                            <!-- <div class="input-group-prepend">
-                                <button class="btn btn-link input-group-text" (click)="copy(notesInput)">
-                                    <fa-icon [icon]="copyIcon" ></fa-icon>
-                                </button>
-                            </div> -->
+                           
                         </div>
                     </div>
                     
@@ -56,7 +52,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 
@@ -125,14 +121,14 @@
 </div>
 
 
-<h1 class="display-4 mt-5">Shared with me</h1>
+<h1 class="display-4 mt-5">Passwords shared with me!</h1>
 <div class="container">
-    <div class="border border-info  p-3 mb-2 bg-info text-white rounded shadow"  *ngIf="sharedService?.sharedContents?.length == 0">
+    <div class="border border-info  p-3 mb-2 bg-info text-white rounded shadow"  *ngIf="sharedService?.sharedPasswordsContents?.length == 0">
         <span >There is no content shared with you yet!</span>
     </div>
 
-    <div class="row"  *ngIf="sharedService?.sharedContents?.length > 0" >
-        <div class="col-sm-12 col-md-6 col-lg-4" *ngFor="let p of sharedService?.sharedContents" >
+    <div class="row"  *ngIf="sharedService?.sharedPasswordsContents?.length > 0" >
+        <div class="col-sm-12 col-md-6 col-lg-4" *ngFor="let p of sharedService?.sharedPasswordsContents" >
             <div class="card m-1  shadow   block-container">
                 <div class="card-body small  border-light">
                     <div>
@@ -184,9 +180,61 @@
                             </div> -->
                         </div>
                     </div>
-                    <!-- <div class="text-center">
-                        <button class="btn btn-link text-info" (click)="loadSharedContent(p)">Load Content</button>
-                    </div> -->
+                    <div style="position: absolute; justify-content: flex-end; margin-bottom: 5px; " class="btn-toolbar small content  fixed-bottom" role="toolbar" aria-label="Toolbar">
+                        <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Toolbar">
+                            <button type="button" class="btn btn-danger" (click)="deleteSharedContent( p)" title="Delete folder">
+                                <fa-icon [icon]="deleteIcon" ></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<h1 class="display-4 mt-5">Notes shared with me!</h1>
+<div class="container">
+    <div class="border border-info  p-3 mb-2 bg-info text-white rounded shadow"  *ngIf="sharedService?.sharedNotesContents?.length == 0">
+        <span >There is no content shared with you yet!</span>
+    </div>
+
+    <div class="row"  *ngIf="sharedService?.sharedNotesContents?.length > 0" >
+        <div class="col-sm-12 col-md-6 col-lg-4" *ngFor="let p of sharedService?.sharedNotesContents" >
+            <div class="card m-1  shadow   block-container">
+                <div class="card-body small  border-light">
+                    <div>
+                        <span class="text-info font-weight-bold" >{{p.name}}</span>
+                        
+                    </div>
+                    <hr>
+
+                    <div class="font-weight-lighter text-success">From: {{p.source}}</div>
+                    
+                    <div >
+                        <div class="input-group input-group-sm">
+                            <textarea rows="10" class="form-control form-control-sm font-weight-lighter input-password text-left"  #notesInput  disabled>{{p.content?.fileNotes}}</textarea>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-link btn-sm input-group-text" (click)="viewPassword(notesInput)" title="View text">
+                                    <fa-icon [icon]="viewPassIcon" ></fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="position: absolute; justify-content: flex-end; margin-bottom: 5px; " class="btn-toolbar small content  fixed-bottom" role="toolbar" aria-label="Toolbar">
+                        <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Toolbar">
+                            <button type="button" class="btn btn-danger" (click)="deleteSharedContent( p)" title="Delete folder">
+                                <fa-icon [icon]="deleteIcon" ></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    
                 </div>
             </div>
         </div>

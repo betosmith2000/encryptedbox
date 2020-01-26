@@ -1,6 +1,6 @@
 {
   "name": "encrypted-box",
-  "version": "1.1.1",
+  "version": "1.1.21",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

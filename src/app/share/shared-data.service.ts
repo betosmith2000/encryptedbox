@@ -3,7 +3,10 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import * as blockstack from 'node_modules/blockstack/dist/blockstack.js';
 import { ApiService } from './api.service';
 import { ShareModel } from './Models/share.model';
+import { ConfirmationService, ResolveEmit } from '@jaspero/ng-confirmations';
+import { ToastrService } from 'ngx-toastr';
 
+declare var $: any;
 
 
 @Injectable({
@@ -17,13 +20,14 @@ import { ShareModel } from './Models/share.model';
     readOptions : any = {decrypt: false, username: null};
     writeOptions : any = {encrypt:false};
 
-    sharedContents:Array<ShareModel>;
+    sharedPasswordsContents:Array<ShareModel>;
+    sharedNotesContents:Array<ShareModel>;
 
     private isSharedContentLoaded: boolean=false;
 
 
-    constructor(private ngxService: NgxUiLoaderService, 
-        private api: ApiService){
+    constructor(private ngxService: NgxUiLoaderService,  private _confirmation: ConfirmationService,
+        private toastr: ToastrService, private api: ApiService){
 
         const appConfig = new blockstack.AppConfig(['store_write', 'publish_data'])
         this.userSession = new blockstack.UserSession({appConfig:appConfig});
@@ -42,16 +46,21 @@ import { ShareModel } from './Models/share.model';
 
 
     getSharedContent(){
-
         if(!this.isSharedContentLoaded){
             this.ngxService.start();        
             this.api.setApi("share");
             this.api.getAll<any>("target=" + this.userName) 
             .subscribe(res => {
                 this.isSharedContentLoaded= true;
-                this.sharedContents =res.data;
+                this.sharedPasswordsContents =res.data.filter(e=> e.type==1);
+                this.sharedNotesContents =res.data.filter(e=> e.type==2);
+
                 this.ngxService.stop();        
-                this.sharedContents.forEach(e=>{
+                this.sharedPasswordsContents.forEach(e=>{
+                  this.loadSharedContent(e);
+
+                });
+                this.sharedNotesContents.forEach(e=>{
                   this.loadSharedContent(e);
 
                 });
@@ -61,6 +70,36 @@ import { ShareModel } from './Models/share.model';
         
             });
         }
+    }
+
+    deleteSharedContent(p: ShareModel){
+
+      this._confirmation.create('Are you sure to delete \'' + p.name +'\' content?')
+      .subscribe((ans: ResolveEmit) => {
+          if (ans.resolved) {
+
+            this.ngxService.start();
+            this.api.delete(p.id)
+            .subscribe(res=>{
+              if(p.type==1){
+                let idx = this.sharedPasswordsContents.findIndex(e=> e.id == p.id);
+                this.sharedPasswordsContents.splice(idx,1);
+              }
+              else if(p.type==2){
+                let idx = this.sharedNotesContents.findIndex(e=> e.id == p.id);
+                this.sharedNotesContents.splice(idx,1);
+              }
+              this.ngxService.stop();
+      
+            }, error =>{
+                console.log('Error deleting shared content');
+                this.ngxService.stop();
+              });
+          }
+      });
+      setTimeout(() => {
+          $(".jaspero__confirmation_dialog").css("position","fixed")    
+      }, 10);
     }
 
     loadSharedContent(p: ShareModel){

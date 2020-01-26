@@ -5,6 +5,10 @@ import { ToastrService } from 'ngx-toastr';
 import { DataNoteService } from '../share/data-note.service';
 import { NoteModel } from '../share/Models/note.model';
 import { FolderNoteModel } from '../share/Models/folder-note.model';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { ApiService } from '../share/api.service';
+import * as blockstack from 'node_modules/blockstack/dist/blockstack.js';
+import { ShareModel } from '../share/Models/share.model';
 
 declare var $: any;
 
@@ -15,8 +19,14 @@ declare var $: any;
   styleUrls: ['./notes.component.scss']
 })
 export class NotesComponent implements OnInit {
+  userSession :any;
 
   
+  readOptions : any = {decrypt: false, username: null};
+  writeOptions : any = {encrypt:false};
+  userName :string  = 'User name';
+
+
   copyIcon = faCopy;
   viewPassIcon = faEye;
   deleteIcon= faTrash;
@@ -34,14 +44,33 @@ export class NotesComponent implements OnInit {
   folderName:FormControl;
   folderNotes:FormControl;
   editingFolderNote:FolderNoteModel;
+  sharingNote:NoteModel;
 
 
-
-  constructor(public dataService: DataNoteService, private toastr: ToastrService) {     }
+  blockstackIdToShare : string;
+  pkToShare:string ='';
+  
+  constructor(public dataService: DataNoteService, private toastr: ToastrService,
+    private ngxService: NgxUiLoaderService, private api: ApiService) {   
+      const appConfig = new blockstack.AppConfig(['store_write', 'publish_data'])
+      this.userSession = new blockstack.UserSession({appConfig:appConfig});
+     }
 
 
   ngOnInit() {
-    
+    if (this.userSession.isSignInPending()) {
+      this.userSession.handlePendingSignIn()
+      .then(userData => {
+        this.userName = userData.userName;
+
+      })
+    } 
+    else  if (this.userSession.isUserSignedIn()) {
+      
+      const userData = this.userSession.loadUserData();
+      this.userName = userData.username;
+
+     } 
     this.initializeForm();
     this.dataService.getRootNotes();
     this.dataService.onSaveNote.subscribe(
@@ -151,6 +180,90 @@ export class NotesComponent implements OnInit {
     this.folderNotes.setValue(p.folderNotes);
     $("#divFolder").modal('show');       
   }
+
+
+  showShareNote(p:NoteModel){
+    this.blockstackIdToShare="";
+    this.sharingNote=p;
+    $("#divShareNote").modal('show');       
+  }
+
+
+  
+  seachPKBlockstackId(type:number){
+    if(!this.blockstackIdToShare || this.blockstackIdToShare ==  ''){
+        this.toastr.warning("You must indicate the Blockstack Id of the user.", "Public Key unknown");
+        return;
+    }
+    this.ngxService.start();        
+
+    this.readOptions.username = this.blockstackIdToShare;
+    this.readOptions.decrypt = false;
+    this.userSession.getFile("publickey.txt", this.readOptions)
+        .then(fileContent =>{
+          if(fileContent!=null && fileContent != '')
+          {
+            this.pkToShare = fileContent;
+            this.encryptNoteContents(type);
+          }
+          else{
+              this.toastr.warning("The Blockstack ID is not yet a user of this application, it is not possible to share the password.", "Public Key unknown");
+          }
+          this.ngxService.stop();        
+      })
+      .catch((error)=>{
+        this.toastr.warning("The public key of the indicated user was not found.", "Public Key unknown");
+        console.log('Error loading public key');
+        this.ngxService.stop();        
+        
+      });
+     
+
+
+  }
+
+  
+  encryptNoteContents(type:number){
+    debugger
+    var fileName =this.sharingNote.id + ".txt";
+            
+    var encryptedBS = this.userSession.encryptContent(JSON.stringify(this.sharingNote), { publicKey:this.pkToShare});
+    this.userSession.putFile(fileName, encryptedBS, this.writeOptions)
+       .then(cipherTextUrl => { 
+         var share= new ShareModel();
+         share.id = this.sharingNote.id;
+         share.source = this.userName;
+         share.target = this.blockstackIdToShare;
+         share.fileName = fileName;
+         share.type = type;
+         share.name =this.sharingNote.fileName;
+         this.api.setApi("share");
+         this.api.add<ShareModel>(share)
+         .subscribe(res => {
+          $("#divShareNote").modal('hide');       
+          this.toastr.success("Note sharing success", "Success");
+           
+          console.log('Note sharing success' );
+          this.ngxService.stop();        
+          }, error =>{
+            console.log('Error sharing note');
+            this.toastr.error("Error note sharing.", "Error");
+            this.ngxService.stop();
+
+          });
+
+        
+        })
+        .catch((error)=>{
+          console.log('Error sharing note');
+          this.toastr.error("Error file saving.", "Error");
+
+          this.ngxService.stop();        
+          
+        });
+   
+  }
+
 
 
 }

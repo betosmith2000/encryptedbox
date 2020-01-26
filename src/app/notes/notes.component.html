@@ -13,18 +13,21 @@
 </div>
 <div class="row">
     <div class="col-sm-12 col-md-6 col-lg-4" *ngFor="let p of dataService?.currentFolder?.folders" >
-        <div class="card  shadow  m-2 manita block-container" (click)="folderEnter(p)">
-            <div class="text-center text-warning" style="margin-top: 50px;">
+        
+            <div class="card border border-info bg-secondary shadow  m-2 manita block-container " (click)="folderEnter(p)">
+                <img src="../../assets/MainPageSmall.png" class="card-img-top  folder-image" alt="Folder">
+            <!-- <div class="text-center text-warning" style="margin-top: 50px;">
                 <fa-icon [icon]="folderIcon" size="10x" ></fa-icon>
-            </div>
+            </div> -->
             <div class="card-img-overlay" >
-                <h5 class="card-title font-weight-lighter">{{p.folderName}}</h5>
-                <p class="card-text content small font-italic">{{p.folderNotes}}</p>
+                <h5 class="card-title font-weight-boold text-white">{{p.folderName}}</h5>
+                <p class="card-text content small font-italic text-white">{{p.folderNotes}}</p>
                 <div style="position: absolute; justify-content: flex-end; margin-bottom: 5px; " class="btn-toolbar small content  fixed-bottom" role="toolbar" aria-label="Toolbar">
                     <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Toolbar">
                         <button type="button" class="btn btn-info mx-1" (click)="showEditFolder($event, p)" title="Edit folder">
                             <fa-icon [icon]="editIcon" ></fa-icon>
                         </button>
+                        
                         <button type="button" class="btn btn-danger" (click)="deleteFolder($event, p)" title="Delete folder">
                             <fa-icon [icon]="deleteIcon" ></fa-icon>
                         </button>
@@ -58,9 +61,9 @@
                             <button type="button" class="btn btn-info" (click)="showEditNote(p)" title="Edit note">
                                 <fa-icon [icon]="editIcon" ></fa-icon>
                             </button>
-                            <!-- <button type="button" class="btn btn-info mx-1" (click)="showShareNote($event, p)" title="Share note" *ngIf="false">
+                            <button type="button" class="btn btn-info mx-1" (click)="showShareNote(p)" title="Share note">
                                 <fa-icon [icon]="shareIcon" ></fa-icon>
-                            </button> -->
+                            </button>
                             <button type="button" class="btn btn-danger" (click)="delete(p)" title="Delete note">
                                 <fa-icon [icon]="deleteIcon" ></fa-icon>
                             </button>
@@ -153,6 +156,49 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" [disabled]="!folderForm.valid" (click)="saveFolder()" >Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+
+<div class="modal" tabindex="-1" role="dialog" id="divShareNote">
+    <form novalidate autocomplete="anyrandomstring">
+
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Share Note</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    
+                <div class="form-row">
+                    <div class="col">
+                        <div>
+                            <small id="passwordHelpBlock" class="form-text text-muted">
+                                Type the BlockstackId of the user to whom you want to share the encrypted post and press Share button.
+                            </small> 
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Blockstack Id</span>
+                            </div>
+                            <input type="text" class="form-control"  aria-label="Url to share" [(ngModel)]="blockstackIdToShare" [ngModelOptions]="{standalone: true}" #blockstackIdToShareinput>
+                            <div class="input-group-append">
+                                <button class="input-group-text" type="button" (click)="seachPKBlockstackId(2)">Share</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

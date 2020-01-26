@@ -1,5 +1,5 @@
 export class ShareModel{
-    idServer:string;
+    idSever:string;
     id:string;
     name:string;
     source:string;

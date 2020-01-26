@@ -80,4 +80,8 @@ export class DashboardComponent implements OnInit {
   loadSharedContent(p: ShareModel){
     this.sharedService.loadSharedContent(p);
   }
+
+  deleteSharedContent(p:ShareModel){
+    this.sharedService.deleteSharedContent (p);
+  }
 }
