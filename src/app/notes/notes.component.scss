@@ -22,7 +22,10 @@
 .content{
     visibility: hidden;;
 }
-
+.block-container:hover{
+    animation: bounceIn .5s ease-in-out 0s 1 alternate!important;
+    box-shadow: 0 .2rem 1rem  black!important;
+}
 .block-container:hover .content{
     visibility: visible;
 }

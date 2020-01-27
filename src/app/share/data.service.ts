@@ -129,6 +129,43 @@ export class DataService {
     
     }
 
+    addPasswordToFolder(p:PasswordModel,f:FolderPasswordModel){
+        let idx = this.currentFolder.passwords.findIndex(e=> e.id == p.id);
+        this.currentFolder.passwords.splice(idx,1);
+        this.ngxService.start(); 
+        this.userSession.putFile(this.currentFolder.filename,JSON.stringify(this.currentFolder) , this.writeOptions)
+        .then(() =>{
+
+            //Agregar el password al folder destino
+            this.userSession.getFile(f.filename,this.readOptions)
+            .then((fileContents) => {
+                f= JSON.parse(fileContents);
+                f.passwords.push(p);
+                
+                this.userSession.putFile(f.filename,JSON.stringify(f) , this.writeOptions)
+                .then(() =>{
+                    this.ngxService.stop(); 
+                }).catch((error) => {
+                    console.log('Error saving password!')
+                    this.ngxService.stop();
+                });
+                
+            }).catch((error) => {
+                console.log('Error reading passwords!')
+                this.ngxService.stop();
+                this.InitialiceRoot();
+            });
+
+
+          
+
+        }).catch((error) => {
+            console.log('Error deleting password!')
+            this.ngxService.stop();
+        });
+    }
+
+
     addPassword(p:PasswordModel, f:any){
         if(this.currentFolder.passwords==null)
             this.currentFolder.passwords=[];

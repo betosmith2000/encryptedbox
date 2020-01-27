@@ -1,5 +1,6 @@
 <h1 class="display-4">My Notes</h1>
-<button type="button" (click)="navigateFolder(p)"  class="btn btn-link btn-sm bc"  *ngFor="let p of dataService?.accessedFolders">{{p.folderName}} /</button>
+<button type="button" (click)="navigateFolder(p)"  class="btn btn-link btn-sm bc"  *ngFor="let p of dataService?.accessedFolders" (drop)="drop($event, p)" 
+(dragover)="allowDrop($event)" (dragenter)="dragEnterFont($event)" (dragleave)="dragLeaveFont($event)" (drop)="dropEndFont($event)">{{p.folderName}} /</button>
 
 <div class="row">
     <div class="col">
@@ -14,12 +15,13 @@
 <div class="row">
     <div class="col-sm-12 col-md-6 col-lg-4" *ngFor="let p of dataService?.currentFolder?.folders" >
         
-            <div class="card border border-info bg-secondary shadow  m-2 manita block-container " (click)="folderEnter(p)">
+            <div class="card border border-info bg-secondary shadow  m-2 manita block-container " (click)="folderEnter(p)" (drop)="drop($event, p)" 
+            (dragover)="allowDrop($event)">
                 <img src="../../assets/MainPageSmall.png" class="card-img-top  folder-image" alt="Folder">
             <!-- <div class="text-center text-warning" style="margin-top: 50px;">
                 <fa-icon [icon]="folderIcon" size="10x" ></fa-icon>
             </div> -->
-            <div class="card-img-overlay" >
+            <div class="card-img-overlay" (dragenter)="dragEnter($event)" (dragleave)="dragLeave($event)" (drop)="dropEnd($event)"  >
                 <h5 class="card-title font-weight-boold text-white">{{p.folderName}}</h5>
                 <p class="card-text content small font-italic text-white">{{p.folderNotes}}</p>
                 <div style="position: absolute; justify-content: flex-end; margin-bottom: 5px; " class="btn-toolbar small content  fixed-bottom" role="toolbar" aria-label="Toolbar">
@@ -39,8 +41,8 @@
     </div>
 </div>
 <div class="row"  >
-    <div class="col-sm-12 col-md-6 col-lg-6" *ngFor="let p of dataService?.currentFolder?.notes" >
-        <div class="card m-1  shadow   block-container">            
+    <div class="col-sm-12 col-md-4 col-lg-4" *ngFor="let p of dataService?.currentFolder?.notes" >
+        <div class="card m-1  shadow   block-container"  draggable="true" (dragstart)="drag($event,p)">            
             <div class="card-body small  border-light">
                 <div>
                     <label class="text-info">{{p.fileName}}</label>

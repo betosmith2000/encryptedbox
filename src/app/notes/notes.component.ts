@@ -264,6 +264,53 @@ export class NotesComponent implements OnInit {
    
   }
 
+//Drag&Drop
+noteDragging:NoteModel;
+allowDrop(ev) {
+  ev.preventDefault();
+}
+
+drag(ev, p:NoteModel) {
+  this.noteDragging = p;
+  ev.dataTransfer.setData("text", ev.target.id);
+}
+
+drop(ev, f:FolderNoteModel) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  this.dataService.addNoteToFolder(this.noteDragging, f);
+}
 
 
+dragEnter(event:any){
+  event.target.style.backgroundColor="green"
+   event.target.style.opacity=".6";
+  // event.target.style.filter="grayscale(0%);";
+ }
+
+ dragLeave(event:any){
+  event.target.style.backgroundColor=""
+  event.target.style.opacity="1"
+  // event.target.style.filter="grayscale(100%);";
+ }
+
+ dropEnd(event:any){
+  event.target.style.backgroundColor=""
+  event.target.style.opacity="1"
+ }
+
+ dragEnterFont(event:any){
+  event.target.style.color="green";
+  event.target.style.fontSize="x-large";
+ }
+
+ dragLeaveFont(event:any){
+  event.target.style.color="";
+  event.target.style.fontSize="";
+
+ }
+ dropEndFont(event:any){
+  event.target.style.color="";
+  event.target.style.fontSize="";
+ }
 }

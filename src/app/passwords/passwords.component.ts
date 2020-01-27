@@ -43,7 +43,7 @@ export class PasswordsComponent implements OnInit {
   fileUserName:FormControl;
   filePassword:FormControl;
   fileNotes:FormControl;
-  editingPassword:PasswordModel;  
+  editingPassword:PasswordModel;
   sharingPassword:PasswordModel;
 
   folderForm :FormGroup;
@@ -52,7 +52,7 @@ export class PasswordsComponent implements OnInit {
   editingFolder: FolderPasswordModel;
 
 
-  
+
   allowNumbers:boolean= true ;
   allowSymbols:boolean= true ;
   allowUpercase:boolean= true ;
@@ -61,16 +61,47 @@ export class PasswordsComponent implements OnInit {
   blockstackIdToShare : string;
   pkToShare:string ='';
 
-  constructor(public dataService: DataService, private toastr: ToastrService, 
-    private ngxService: NgxUiLoaderService, private api: ApiService) {    
+  constructor(public dataService: DataService, private toastr: ToastrService,
+    private ngxService: NgxUiLoaderService, private api: ApiService) {
     const appConfig = new blockstack.AppConfig(['store_write', 'publish_data'])
     this.userSession = new blockstack.UserSession({appConfig:appConfig});
-    
-
    }
 
-  
+
+
   ngOnInit() {
+
+    document.addEventListener("dragstart", function( event:any ) {
+
+      event.target.style.backgroundColor  = "#47BFC1";
+    }, false);
+      document.addEventListener("dragend", function( event:any ) {
+
+        event.target.style.backgroundColor  = "";
+    }, false);
+
+    document.addEventListener("drop", function( event :any ) {
+     // event.preventDefault();
+      event.target.style.color="";
+      event.target.style.fontSize="";
+      event.target.style.backgroundColor  = "";
+    
+    }, false);
+
+    // document.addEventListener("dragenter", function( event:any ) {
+    //   // highlight potential drop target when the draggable element enters it
+    //   if ( event.target.className.indexOf("dropzone")>=0 ) {
+    //       event.target.style.opacity = "1";
+    //   }
+    // }, false);
+
+    // document.addEventListener("dragleave", function( event:any ) {
+    //   // highlight potential drop target when the draggable element enters it
+    //   if ( event.target.className.indexOf("dropzone")>=0 ) {
+    //       event.target.style.opacity = ".5";
+    //   }
+    // }, false);
+
 
     if (this.userSession.isSignInPending()) {
       this.userSession.handlePendingSignIn()
@@ -78,13 +109,13 @@ export class PasswordsComponent implements OnInit {
         this.userName = userData.userName;
 
       })
-    } 
+    }
     else  if (this.userSession.isUserSignedIn()) {
-      
+
       const userData = this.userSession.loadUserData();
       this.userName = userData.username;
 
-     } 
+     }
 
 
 
@@ -94,7 +125,7 @@ export class PasswordsComponent implements OnInit {
       function(res){
         if(res){
           $("#divFile").modal('hide');
-          
+
         }
       }
     );
@@ -121,12 +152,12 @@ export class PasswordsComponent implements OnInit {
     });
 
 
-  
+
 
     this.folderName = new FormControl('', [Validators.required]);
     this.folderNotes = new FormControl('');
 
-    
+
 
     this.folderForm = new FormGroup({
       folderName: this.folderName,
@@ -135,9 +166,9 @@ export class PasswordsComponent implements OnInit {
 
 
   }
-  
+
   newPassword(){
-    $("#divGenerateSettings").hide();      
+    $("#divGenerateSettings").hide();
 
     this.editingPassword = new PasswordModel();
   }
@@ -161,7 +192,7 @@ export class PasswordsComponent implements OnInit {
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
     inputElement.disabled=true;
-    this.toastr.success("Copied!",'Success')        
+    this.toastr.success("Copied!",'Success')
   }
 
   viewPassword(inputElement){
@@ -174,7 +205,7 @@ export class PasswordsComponent implements OnInit {
       inputElement.className = inputElement.className + " input-password";
       //this.viewPassIcon = faEyeSlash;
     }
-    
+
   }
 
   delete(p:PasswordModel){
@@ -182,7 +213,7 @@ export class PasswordsComponent implements OnInit {
   }
 
   deleteFolder(event:Event, p:FolderPasswordModel){
-    event.stopPropagation();    
+    event.stopPropagation();
     this.dataService.deleteFolder(p);
 
   }
@@ -201,14 +232,14 @@ export class PasswordsComponent implements OnInit {
 
   folderEnter(p:FolderPasswordModel){
     this.dataService.setCurrentFolder(p);
-    
+
   }
 
   navigateFolder(p:FolderPasswordModel){
     this.dataService.navigateToFolder(p);
   }
 
-  
+
   validURL(str) {
     var pattern = new RegExp('^(https|http?:\\/\\/)?'+ // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
@@ -228,7 +259,7 @@ export class PasswordsComponent implements OnInit {
     let idx = this.dataService.bookmarkPasswords.findIndex(e=> e.id == p.id);
     if(idx>=0)
       return true;
-    else 
+    else
       return false;
 
   }
@@ -243,9 +274,9 @@ export class PasswordsComponent implements OnInit {
     this.fileUserName.setValue(p.fileUserName);
     this.filePassword.setValue(p.filePassword);
     this.fileNotes.setValue(p.fileNotes);
-    $("#divGenerateSettings").hide();      
+    $("#divGenerateSettings").hide();
 
-    $("#divFile").modal('show');       
+    $("#divFile").modal('show');
 
   }
 
@@ -254,13 +285,13 @@ export class PasswordsComponent implements OnInit {
     this.editingFolder=p;
     this.folderName.setValue(p.folderName);
     this.folderNotes.setValue(p.folderNotes);
-    $("#divFolder").modal('show');       
+    $("#divFolder").modal('show');
   }
 
   showSharePassword(p:PasswordModel){
     this.blockstackIdToShare="";
     this.sharingPassword=p;
-    $("#divSharePassword").modal('show');       
+    $("#divSharePassword").modal('show');
   }
 
 
@@ -269,7 +300,7 @@ export class PasswordsComponent implements OnInit {
         this.toastr.warning("You must indicate the Blockstack Id of the user.", "Public Key unknown");
         return;
     }
-    this.ngxService.start();        
+    this.ngxService.start();
 
     this.readOptions.username = this.blockstackIdToShare;
     this.readOptions.decrypt = false;
@@ -283,26 +314,26 @@ export class PasswordsComponent implements OnInit {
           else{
               this.toastr.warning("The Blockstack ID is not yet a user of this application, it is not possible to share the password.", "Public Key unknown");
           }
-          this.ngxService.stop();        
+          this.ngxService.stop();
       })
       .catch((error)=>{
         this.toastr.warning("The public key of the indicated user was not found.", "Public Key unknown");
         console.log('Error loading public key');
-        this.ngxService.stop();        
-        
+        this.ngxService.stop();
+
       });
-     
+
 
 
   }
 
-  
+
   encryptPasswordContents(type:number){
     var fileName =this.sharingPassword.id + ".txt";
-            
+
     var encryptedBS = this.userSession.encryptContent(JSON.stringify(this.sharingPassword), { publicKey:this.pkToShare});
     this.userSession.putFile(fileName, encryptedBS, this.writeOptions)
-       .then(cipherTextUrl => { 
+       .then(cipherTextUrl => {
          var share= new ShareModel();
          share.id = this.sharingPassword.id;
          share.source = this.userName;
@@ -313,11 +344,11 @@ export class PasswordsComponent implements OnInit {
          this.api.setApi("share");
          this.api.add<ShareModel>(share)
          .subscribe(res => {
-          $("#divSharePassword").modal('hide');       
+          $("#divSharePassword").modal('hide');
           this.toastr.success("Password sharing success", "Success");
-           
+
           console.log('Password sharing success' );
-          this.ngxService.stop();        
+          this.ngxService.stop();
           }, error =>{
             console.log('Error sharing password');
             this.toastr.error("Error password sharing.", "Error");
@@ -325,23 +356,23 @@ export class PasswordsComponent implements OnInit {
 
           });
 
-        
+
          //aqui vamos a guardar al servicio
         })
         .catch((error)=>{
           console.log('Error sharing password');
           this.toastr.error("Error file saving.", "Error");
 
-          this.ngxService.stop();        
-          
+          this.ngxService.stop();
+
         });
-   
+
   }
 
   getNewPassword(){
    if(!(this.passwordLength>0))
     this.passwordLength = 10;
-    
+
     var password = passgenerator.generate({
       numbers:this.allowNumbers,
       length:this.passwordLength,
@@ -350,14 +381,64 @@ export class PasswordsComponent implements OnInit {
       strict:true
     });
     this.filePassword.setValue(password);
-    
+
   }
 
   showGenerateSettings(){
-    $("#divGenerateSettings").toggle( "slow");      
+    $("#divGenerateSettings").toggle( "slow");
   }
 
   resetPasswordGenerationSettings(){
-    $("#divGenerateSettings").toggle( "slow");      
+    $("#divGenerateSettings").toggle( "slow");
   }
+
+  //Drag&Drop
+  passwordDragging:PasswordModel;
+  allowDrop(ev) {
+    ev.preventDefault();
+  }
+
+  drag(ev, p:PasswordModel) {
+    this.passwordDragging = p;
+    ev.dataTransfer.setData("text", ev.target.id);
+  }
+
+  drop(ev, f:FolderPasswordModel) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    this.dataService.addPasswordToFolder(this.passwordDragging, f);
+  }
+
+  dragEnter(event:any){
+    event.target.style.backgroundColor="green"
+     event.target.style.opacity=".6";
+    // event.target.style.filter="grayscale(0%);";
+   }
+
+   dragLeave(event:any){
+    event.target.style.backgroundColor=""
+    event.target.style.opacity="1"
+    // event.target.style.filter="grayscale(100%);";
+   }
+
+   dropEnd(event:any){
+    event.target.style.backgroundColor=""
+    event.target.style.opacity="1"
+   }
+
+   dragEnterFont(event:any){
+    event.target.style.color="green";
+    event.target.style.fontSize="x-large";
+   }
+
+   dragLeaveFont(event:any){
+    event.target.style.color="";
+    event.target.style.fontSize="";
+
+   }
+   dropEndFont(event:any){
+    event.target.style.color="";
+    event.target.style.fontSize="";
+   }
+
 }

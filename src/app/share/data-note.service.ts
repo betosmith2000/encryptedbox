@@ -113,6 +113,42 @@ export class DataNoteService {
         });
     }
 
+    addNoteToFolder(p:NoteModel,f:FolderNoteModel){
+        let idx = this.currentFolder.notes.findIndex(e=> e.id == p.id);
+        this.currentFolder.notes.splice(idx,1);
+        this.ngxService.start(); 
+        this.userSession.putFile(this.currentFolder.filename,JSON.stringify(this.currentFolder) , this.writeOptions)
+        .then(() =>{
+
+            //Agregar el password al folder destino
+            this.userSession.getFile(f.filename,this.readOptions)
+            .then((fileContents) => {
+                f= JSON.parse(fileContents);
+                f.notes.push(p);
+                
+                this.userSession.putFile(f.filename,JSON.stringify(f) , this.writeOptions)
+                .then(() =>{
+                    this.ngxService.stop(); 
+                }).catch((error) => {
+                    console.log('Error saving note!')
+                    this.ngxService.stop();
+                });
+                
+            }).catch((error) => {
+                console.log('Error reading note!')
+                this.ngxService.stop();
+                this.InitialiceRoot();
+            });
+
+
+          
+
+        }).catch((error) => {
+            console.log('Error deleting note!')
+            this.ngxService.stop();
+        });
+    }
+
     addNote(p:NoteModel, f:any){
         if(this.currentFolder.notes==null)
             this.currentFolder.notes=[];
